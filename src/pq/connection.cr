@@ -170,6 +170,8 @@ module PQ
             handle_async_frames(read_one_frame(soc.read_char))
           rescue e : IO::Error
             @soc.closed? ? break : raise e
+          rescue e : IO::EOFError
+            @soc.closed? ? break : raise e
           end
         {% else %}
           begin
@@ -178,6 +180,8 @@ module PQ
             e.errno == Errno::EBADF && @soc.closed? ? break : raise e
           rescue e : IO::Error
             # Before 0.34 IO::Error was raised also in some situations
+            @soc.closed? ? break : raise e
+          rescue e : IO::EOFError
             @soc.closed? ? break : raise e
           end
         {% end %}
