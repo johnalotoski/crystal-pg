@@ -171,7 +171,7 @@ module PQ
           rescue e : IO::Error
             @soc.closed? ? break : raise e
           rescue e : IO::EOFError
-            @soc.closed? ? break : raise e
+            break
           end
         {% else %}
           begin
@@ -182,7 +182,7 @@ module PQ
             # Before 0.34 IO::Error was raised also in some situations
             @soc.closed? ? break : raise e
           rescue e : IO::EOFError
-            @soc.closed? ? break : raise e
+            break
           end
         {% end %}
       end
